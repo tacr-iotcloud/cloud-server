@@ -1,0 +1,147 @@
+<system>
+	<factory>
+		<instance name="uiServer" class="BeeeOn::PocoRestServer">
+			<set name="router" ref="uiRouter" />
+			<set name="filterChain" ref="uiFilterChain" />
+			<set name="sessionVerifier" ref="sessionVerifier" />
+			<set name="translatorFactory" ref="translatorFactory" />
+			<set name="localeManager" ref="localeManager" />
+			<set name="sslConfig" ref="restuiSSLServer" if-yes="${restui.ssl.enable}" />
+			<set name="name" text="restui" />
+			<set name="host" text="${restui.host}" />
+			<set name="port" number="${restui.port}" />
+			<set name="backlog" number="${restui.backlog}" />
+			<set name="minThreads" number="${restui.minThreads}" />
+			<set name="maxThreads" number="${restui.maxThreads}" />
+			<set name="threadIdleTime" time="${restui.threadIdleTime}" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
+			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />
+		</instance>
+
+		<instance name="sessionVerifier" class="BeeeOn::SessionVerifierImpl">
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="uiFilterChain" class="BeeeOn::HTTPFilterChain">
+			<add name="filters" ref="allCustomHeaders" />
+			<add name="filters" ref="corsFilter" />
+		</instance>
+
+		<instance name="allCustomHeaders" class="BeeeOn::HTTPCustomHeadersFilter">
+			<set name="uriPattern" text="*" />
+			<set name="headers">
+				<pair key="Strict-Transport-Security"
+					text="max-age=31536000; includeSubDomains" />
+				<pair key="Referrer-Policy" text="no-referrer-when-downgrade" />
+				<pair key="X-Content-Type-Options" text="nosniff" />
+				<pair key="X-XSS-Protection" text="1; mode=block" />
+				<pair key="X-Frame-Options" text="SAMEORIGIN" />
+			</set>
+		</instance>
+
+		<instance name="corsFilter" class="BeeeOn::CORSFilter">
+			<set name="requireOrigin" number="0" />
+			<set name="allowedOrigins" list="${restui.cors.origins}" />
+			<set name="allowedMethods" list="${restui.cors.methods}" />
+			<set name="allowedHeaders" list="${restui.cors.headers}" />
+			<set name="allowCredentials" number="1" />
+			<set name="preflightMaxAge" time="${restui.cors.maxAge}" />
+		</instance>
+
+		<instance name="uiRouter" class="BeeeOn::RestRouter">
+			<set name="apiName" text="restui" />
+			<set name="applicationName" text="BeeeOn Server" />
+			<set name="configurationFile" text="${spec.restui.ini}" />
+			<add name="handlers" ref="uiAuthHandler" />
+			<add name="handlers" ref="uiBuiltinHandler" />
+			<add name="handlers" ref="uiGatewayHandler" />
+			<add name="handlers" ref="uiProfileHandler" />
+			<add name="handlers" ref="uiMessageHandler" />
+			<add name="handlers" ref="uiLocationHandler" />
+			<add name="handlers" ref="uiRoleHandler" />
+			<add name="handlers" ref="uiDeviceHandler" />
+			<add name="handlers" ref="uiDevicePropertiesHandler" />
+			<add name="handlers" ref="uiSensorHandler" />
+			<add name="handlers" ref="uiControlHandler" />
+			<add name="handlers" ref="uiTypeHandler" />
+			<add name="handlers" ref="uiFCMTokenHandler" if-yes="${fcm.enable}" />
+			<add name="handlers" ref="uiTimeZoneHandler" />
+			<add name="handlers" ref="uiOAuth2Callback" />
+			<add name="handlers" ref="uiCPSPHandler" />
+		</instance>
+
+		<instance name="uiBuiltinHandler" class="BeeeOn::BuiltinRestHandler" />
+		<instance name="uiOAuth2Callback" class="BeeeOn::RestUI::OAuth2CallbackRestHandler" />
+
+		<instance name="testerIndex" class="BeeeOn::Tester::IndexHandler" />
+
+		<instance name="testerFcmsw" class="BeeeOn::Tester::FcmswHandler">
+			<set name="senderId" text="${fcm.senderId}" />
+		</instance>
+
+		<instance name="uiCPSPHandler" class="BeeeOn::CPSPRestHandler">
+			<add name="handlers" ref="testerIndex" />
+			<add name="handlers" ref="testerFcmsw" if-yes="${fcm.enable}" />
+		</instance>
+
+		<instance name="uiAuthHandler" class="BeeeOn::AuthRestHandler">
+			<set name="authService" ref="authService" />
+		</instance>
+
+		<instance name="uiGatewayHandler" class="BeeeOn::RestUI::GatewayRestHandler">
+			<set name="gatewayService" ref="gatewayService" />
+			<set name="timeZoneProvider" ref="timeZoneProvider" />
+		</instance>
+
+		<instance name="uiMessageHandler" class="BeeeOn::RestUI::MessageRestHandler">
+			<set name="gatewayMessageService" ref="gatewayMessageService" />
+		</instance>
+
+		<instance name="uiProfileHandler" class="BeeeOn::RestUI::ProfileRestHandler">
+			<set name="identityService" ref="identityService" />
+		</instance>
+
+		<instance name="uiLocationHandler" class="BeeeOn::RestUI::LocationRestHandler">
+			<set name="locationService" ref="locationService" />
+		</instance>
+
+		<instance name="uiRoleHandler" class="BeeeOn::RestUI::RoleRestHandler">
+			<set name="roleService" ref="roleService" />
+			<set name="identityService" ref="identityService" />
+		</instance>
+
+		<instance name="uiDeviceHandler" class="BeeeOn::RestUI::DeviceRestHandler">
+			<set name="deviceService" ref="deviceService" />
+			<set name="gatewayService" ref="gatewayService" />
+		</instance>
+
+		<instance name="uiDevicePropertiesHandler" class="BeeeOn::RestUI::DevicePropertiesRestHandler">
+			<set name="deviceService" ref="deviceService" />
+			<set name="cryptoConfig" ref="devicePropertiesCryptoConfig" />
+		</instance>
+
+		<instance name="uiSensorHandler" class="BeeeOn::RestUI::SensorRestHandler">
+			<set name="sensorService" ref="sensorService" />
+			<set name="sensorHistoryService" ref="sensorHistoryService" />
+		</instance>
+
+		<instance name="uiControlHandler" class="BeeeOn::RestUI::ControlRestHandler">
+			<set name="controlService" ref="controlService" />
+			<set name="requestTimeout" time="25 s" />
+		</instance>
+
+		<instance name="uiTypeHandler" class="BeeeOn::RestUI::TypeRestHandler">
+			<set name="typeInfoProvider" ref="typeInfoProvider" />
+			<set name="subtypeInfoProvider" ref="subtypeInfoProvider" />
+		</instance>
+
+		<instance name="uiFCMTokenHandler" class="BeeeOn::RestUI::FCMTokenRestHandler">
+			<set name="fcmTokenService" ref="fcmTokenService" />
+			<set name="senderId" text="${fcm.senderId}" />
+		</instance>
+
+		<instance name="uiTimeZoneHandler" class="BeeeOn::RestUI::TimeZoneRestHandler">
+			<set name="timeZoneProvider" ref="timeZoneProvider" />
+		</instance>
+	</factory>
+</system>

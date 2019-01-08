@@ -1,0 +1,343 @@
+root {
+	hello { "Translation works" }
+
+	not_authenticated { "not authenticated" }
+	requested_resource_missing { "requested resource does not exist" }
+	not_enough_permission { "not enough permission to access the resource" }
+	malformed_input_data { "could not process input data" }
+	invalid_input_data { "invalid input data" }
+	in_progress { "operation in progress" }
+	already_exists { "entity already exists" }
+	entity_not_writable { "entity is not writable" }
+
+	auth {
+		providers {
+			google { "Google Login" }
+			facebook { "Facebook Login" }
+			permit { "Permit Login" }
+			apikey { "API Key Login" }
+		}
+	}
+
+	types {
+		availability {
+			label { "availability" }
+			values {
+				unavailable { "unavailable" }
+				available  { "available" }
+			}
+		}
+		battery {
+			label { "battery" }
+			levels {
+				critical { "critical" }
+				low    { "low" }
+				medium { "medium" }
+				high   { "high" }
+			}
+		}
+		bitmap {
+			label { "bitmap" }
+		}
+		brightness {
+			label { "brightness" }
+		}
+		co2 {
+			label { "CO2" }
+			levels {
+				outdoor      { "normal outdoor" }
+				indoor       { "normal indoor" }
+				poor_air     { "poor air" }
+				unhealthy    { "adverse health effects" }
+				stay_hours   { "dangerous after few hours" }
+				stay_minutes { "dangerous after several minutes" }
+				dangerous    { "extreme and dangerous" }
+			}
+		}
+		enum {
+			label { "enumeration" }
+		}
+		fire {
+			label { "fire" }
+			values {
+				no_fire { "no fire" }
+				fire    { "fire" }
+			}
+		}
+		humidity {
+			label { "humidity" }
+		}
+		luminance {
+			label { "luminance" }
+		}
+		motion {
+			label { "motion" }
+			values {
+				no_motion { "no motion" }
+				motion    { "motion" }
+			}
+		}
+		noise {
+			label { "noise" }
+			levels {
+				normal         { "normal" }
+				acceptable     { "acceptable" }
+				laud           { "loud" }
+				dangerous      { "dangerous for several minutes stay" }
+				very_dangerous { "dangerous for few minutes stay" }
+				damaging       { "immediate nerve damage possible" }
+			}
+		}
+		open_close {
+			label { "open/close" }
+			values {
+				closed { "closed" }
+				open   { "open" }
+			}
+		}
+		on_off {
+			label { "on/off" }
+			values {
+				off { "off" }
+				on  { "on" }
+			}
+		}
+		performance {
+			label { "performance" }
+			levels {
+				idle      { "idle" }
+				high_load { "high load" }
+			}
+		}
+		pressure {
+			label { "pressure" }
+		}
+		rssi {
+			label { "signal" }
+			levels {
+				poor { "poor" }
+				good { "good" }
+				high { "high" }
+			}
+		}
+		security_alert {
+			label { "security alert" }
+			values {
+				ease  { "ease" }
+				alert { "alert" }
+			}
+		}
+		shake {
+			label { "shake" }
+			values {
+				ease  { "ease" }
+				shake { "shake" }
+			}
+		}
+		temperature {
+			label { "temperature" }
+		}
+		ultraviolet {
+			label { "UV" }
+			levels {
+				low       { "low" }
+				moderate  { "moderate" }
+				high      { "high" }
+				very_high { "very high" }
+				extreme   { "extreme" }
+			}
+		}
+		power {
+			label { "power" }
+		}
+		voltage {
+			label { "voltage" }
+		}
+		current {
+			label { "current" }
+		}
+		frequency {
+			label { "frequency" }
+		}
+		color_temperature {
+			label { "color temperature" }
+		}
+		color {
+			label { "color" }
+		}
+		smoke {
+			label { "smoke" }
+			values {
+				clear { "clear" }
+				smoke { "smoke" }
+			}
+		}
+		heat {
+			label { "heat" }
+			values {
+				normal { "normal" }
+				overheat { "overheat" }
+			}
+		}
+		pm25 {
+			label { "particulate matter <2.5 um" }
+			values {
+				very_low  { "very low" }
+				low       { "low" }
+				medium    { "medium" }
+				high      { "high" }
+				very_high { "very high" }
+			}
+		}
+	}
+
+	enums {
+		MOD_BOILER_OPERATION_TYPE {
+			label { "heating type" }
+			values {
+				off { "off" }
+				room_regulator { "room regulator" }
+				equiterm_regulator { "equiterm regulator" }
+				constant_water { "constant water" }
+				hot_water { "hot water" }
+			}
+		}
+
+		MOD_BOILER_OPERATION_MODE {
+			label { "operation mode" }
+			values {
+				automatic { "automatic" }
+				manual { "manual" }
+				vacation { "vacation" }
+			}
+		}
+
+		MOD_BOILER_STATUS {
+			label { "boiler status" }
+			values {
+				undefined { "undefined" }
+				heating { "heating" }
+				hot_water { "heating water" }
+				failure { "failure" }
+				shutdown { "shutdown" }
+			}
+		}
+
+		MOD_BOILER_MODE {
+			label { "boiler mode" }
+			values {
+				undefined { "undefined" }
+				on { "on" }
+				off { "off" }
+			}
+		}
+
+		SIREN_BEEPING {
+			label { "siren beeping" }
+			values {
+				none { "none" }
+				slow { "slow" }
+				fast { "fast" }
+			}
+		}
+	}
+
+	bitmaps {
+		MOD_CURRENT_BOILER_OT_FAULT_FLAGS {
+			label { "OT Fault Flags" }
+			flags {
+				service_request { "service request" }
+				lockout_reset { "lockout reset enabled" }
+				low_water_press { "low water pressure" }
+				gas_flame_fault { "gas/flame fault" }
+				air_press_fault { "air pressure fault" }
+				water_overtemp { "water overheated" }
+			}
+		}
+
+		MOD_CURRENT_BOILER_OT_OEM_FAULTS {
+			label { "OT OEM Faults" }
+			groups {
+				oem_specific { "OEM specific" }
+			}
+		}
+	}
+
+	modules {
+		room_temperature {
+			label { "room temperature" }
+		}
+		outside_temperature {
+			label { "outside temperature" }
+		}
+		room_humidity {
+			label { "room humidity" }
+		}
+
+		groups {
+			zone_1 {
+				label { "zone 1" }
+			}
+			zone_2 {
+				label { "zone 2" }
+			}
+			zone_3 {
+				label { "zone 3" }
+			}
+			zone_4 {
+				label { "zone 4" }
+			}
+		}
+	}
+
+	gateway {
+		scan {
+			state {
+				idle { "No device discovery in progress" }
+				waiting { "Starting device discovery" }
+				processing { "Device discovery in progress" }
+				finished { "Device discovery was successful" }
+				failed { "Failed during device discovery" }
+			}
+		}
+
+		pair_device_failed   { "device {0} has failed to pair on gateway {1}" }
+		unpair_device_failed { "device {0} has failed to unpair on gateway {1}" }
+		new_device_refused   { "new device {0} has been refused by server during discovery on gateway {1}" }
+	}
+
+	baf {
+		gateway_watcher {
+			connected {
+				title { "Gateway {0} connected" }
+				body { "Gateway {0} connected at {1}." }
+			}
+
+			reconnected {
+				title { "Gateway {0} reconnected" }
+				body {
+					"Gateway {0} reconnected at {1}. If you see many reconnects,"
+					" please check the Internet connection of your BeeeOn Gateway."
+				}
+			}
+
+			disconnected {
+				title { "Gateway {0} disconnected" }
+				body {
+					"Gateway {0} disconnected at {1}. If this is an unexpected event,"
+					" please check the Internet connection of your BeeeOn Gateway."
+				}
+			}
+		}
+	}
+
+	device {
+		property {
+			ip-address { "IP address" }
+			password { "Password" }
+			firmware { "Firmware" }
+			mac-address { "MAC address" }
+			serial { "Serial number" }
+		}
+	}
+}

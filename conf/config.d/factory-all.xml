@@ -1,0 +1,24 @@
+<system>
+	<factory>
+		<instance name="all" class="BeeeOn::LoopRunner">
+			<add name="runnables" ref="eventsExecutor" />
+			<add name="runnables" ref="fcmSender" if-yes="${fcm.enable}" />
+			<add name="loops" ref="gatewayCommunicator" />
+			<add name="loops" ref="gatewayScanController" />
+			<add name="loops" ref="webSocketServer" />
+			<add name="loops" ref="responseExpectedQueue" />
+			<add name="loops" ref="asyncGatewayRPC" />
+			<add name="loops" ref="uiServer" />
+		</instance>
+
+		<instance name="securityChecker" class="BeeeOn::StartupSecurityChecker" init="early">
+			<set name="mode" text="${application.security.mode}" />
+			<set name="rootAllowed" number="0" />
+			<set name="user" text="beeeon_user" />
+			<set name="peerVerifier" text="${gws.peer.verifier}" />
+			<set name="securePeerVerifiers" list="strict" />
+			<set name="gatewayLimiter" text="${gws.rate.impl}" />
+			<set name="secureGatewayLimiters" list="slidingWindow" />
+		</instance>
+	</factory>
+</system>

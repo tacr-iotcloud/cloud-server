@@ -1,0 +1,40 @@
+<system>
+	<factory>
+		<!-- SSL configurations -->
+
+		<instance name="restuiSSLServer" class="BeeeOn::SSLServer">
+			<set name="certificate" text="${restui.ssl.certificate}" />
+			<set name="privateKey" text="${restui.ssl.key}" />
+			<set name="caLocation" text="${restui.ssl.authority}" />
+			<set name="verificationMode" text="${restui.ssl.verifyMode}" />
+			<set name="loadDefaultCA" text="false" />
+		</instance>
+
+		<instance name="googleOAuthSSL" class="BeeeOn::SSLClient">
+			<set name="verificationMode" text="${google.ssl.verifyMode}" />
+			<set name="caLocation" text="${google.ssl.authority}" />
+			<set name="disabledProtocols" text="sslv2,sslv3,tlsv1,tlsv1_1" />
+		</instance>
+
+		<instance name="facebookOAuthSSL" class="BeeeOn::SSLClient">
+			<set name="verificationMode" text="${facebook.ssl.verifyMode}" />
+			<set name="caLocation" text="${facebook.ssl.authority}" />
+			<set name="disabledProtocols" text="sslv2,sslv3,tlsv1,tlsv1_1" />
+		</instance>
+
+		<instance name="gwsSSLServer" class="BeeeOn::SSLServer">
+			<set name="certificate" text="${gws.ws.ssl.certificate}" />
+			<set name="privateKey" text="${gws.ws.ssl.key}" />
+			<set name="caLocation" text="${gws.ws.ssl.authority}" />
+			<set name="verificationMode" text="${gws.ws.ssl.verifyMode}" />
+			<set name="loadDefaultCA" text="false" />
+			<set name="extendedCertificateVerification" number="0" />
+		</instance>
+
+		<instance name="fcmApiSSL" class="BeeeOn::SSLClient">
+			<set name="verificationMode" text="${fcm.ssl.verifyMode}" />
+			<set name="caLocation" text="${fcm.ssl.authority}" />
+			<set name="disabledProtocols" text="sslv2,sslv3,tlsv1,tlsv1_1" />
+		</instance>
+	</factory>
+</system>

@@ -1,0 +1,250 @@
+<system>
+	<factory>
+		<!-- Providers -->
+
+		<instance name="subtypeInfoProvider" class="BeeeOn::SubtypeInfoProvider">
+			<set name="enumsFile" text="${spec.enums.xml}" />
+			<set name="bitmapsFile" text="${spec.bitmaps.xml}" />
+		</instance>
+
+		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">
+			<set name="typesFile" text="${spec.types.xml}" />
+		</instance>
+
+		<instance name="deviceInfoProvider" class="BeeeOn::DeviceInfoProvider">
+			<set name="typeInfoProvider" ref="typeInfoProvider" />
+			<set name="subtypeInfoProvider" ref="subtypeInfoProvider" />
+			<set name="devicesFile" text="${spec.devices.xml}" />
+		</instance>
+
+		<instance name="devicePropertiesCryptoConfig" class="BeeeOn::CryptoConfig">
+			<set name="algorithm" text="${secure.device_properties.algorithm}" />
+			<set name="passphrase" text="${secure.device_properties.passphrase}" />
+		</instance>
+
+		<instance name="pocoRandomProvider"
+				class="BeeeOn::PocoRandomProvider" />
+
+		<instance name="mockRandomProvider"
+				class="BeeeOn::MockRandomProvider">
+			<set name="nextRandom" text="0123456789abcdef" />
+		</instance>
+
+		<instance name="insecureRandomProvider"
+				class="BeeeOn::InsecureRandomProvider">
+			<set name="providerImpl" ref="mockRandomProvider" />
+		</instance>
+
+		<instance name="loggingQueryProfiler" class="BeeeOn::LoggingQueryProfiler" />
+
+		<!-- RPC communication -->
+
+		<instance name="fakeGatewayRPC" class="BeeeOn::FakeGatewayRPC">
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="asyncExecutor" ref="eventsExecutor" />
+		</instance>
+
+		<instance name="asyncGatewayRPC" class="BeeeOn::AsyncGatewayRPC">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
+			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
+			<set name="defaultTimeout" time="${gateway-rpc.async.defaultTimeout}" />
+			<set name="devicePropertyDao" ref="devicePropertyDao" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="cryptoConfig" ref="devicePropertiesCryptoConfig" />
+		</instance>
+
+		<alias name="gatewayRPC" ref="${gateway-rpc.type}GatewayRPC" />
+
+		<!-- Data access layer -->
+
+		<alias name="userDao" ref="sqlUserDao" />
+		<alias name="gatewayDao" ref="sqlGatewayDao" />
+		<alias name="gatewayMessageDao" ref="sqlGatewayMessageDao" />
+		<alias name="gatewayStatusDao" ref="sqlGatewayStatusDao" />
+		<alias name="locationDao" ref="sqlLocationDao" />
+		<alias name="deviceDao" ref="sqlDeviceDao" />
+		<alias name="devicePropertyDao" ref="sqlDevicePropertyDao" />
+		<alias name="identityDao" ref="sqlIdentityDao" />
+		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
+		<alias name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
+		<alias name="sensorHistoryDao" ref="sqlSensorHistoryDao" />
+		<alias name="controlDao" ref="sqlControlDao" />
+		<alias name="fcmTokenDao" ref="sqlFcmTokenDao" />
+		<alias name="fcmRecipientsDao" ref="sqlFcmRecipientsDao" />
+
+		<instance name="primaryDaoManager"
+				class="BeeeOn::PocoDaoManager">
+			<set name="connector" ref="${database.backend}Connector" />
+			<set name="connectionString" text="${database.connector}" />
+			<set name="connectionTimeout" time="${database.timeout}" />
+			<set name="features" text="${database.features}" />
+			<set name="maxSessions" number="${database.pool}" />
+			<add name="initializers" ref="primaryTestSchemaInitializer" if-yes="${testing.enable}" />
+			<add name="initializers" ref="primaryTestDataInitializer" if-yes="${testing.enable}" />
+		</instance>
+
+		<instance name="primaryTestSchemaInitializer" class="BeeeOn::PocoSqitchInitializer">
+			<set name="planFile" text="db/pgsql/sqitch.plan" />
+			<set name="baseDir" text="${application.configDir}../db/pgsql" />
+		</instance>
+
+		<instance name="primaryTestDataInitializer" class="BeeeOn::PocoSimpleDBInitializer">
+			<set name="script" text="${application.configDir}../t/testing-data.sql" />
+		</instance>
+
+		<constant name="cassandra.pool" number="${cassandra.pool}" />
+
+		<instance name="cassandraDaoManager"
+				class="BeeeOn::PocoDaoManager">
+			<set name="connector" ref="cassandraConnector" />
+			<set name="connectionString" text="${cassandra.connector}" />
+			<set name="connectionTimeout" time="${cassandra.timeout}" />
+			<set name="features" text="${cassandra.features}" />
+			<set name="maxSessions" number="${cassandra.pool}" />
+		</instance>
+
+		<instance name="pocoTransactionFactory"
+				class="BeeeOn::PocoTransactionFactory">
+			<set name="daoManager" ref="primaryDaoManager" />
+		</instance>
+
+		<instance name="transactionManager" class="BeeeOn::ThreadLocalTransactionManager">
+			<set name="factory" ref="pocoTransactionFactory" />
+		</instance>
+
+		<instance name="sqliteConnector"
+				class="BeeeOn::PocoSQLiteConnectorLoader"
+				library="BeeeOnServerSQLiteConnector" />
+
+		<instance name="odbcConnector"
+				class="BeeeOn::PocoODBCConnectorLoader"
+				library="BeeeOnServerODBCConnector" />
+
+		<instance name="cassandraConnector"
+				class="BeeeOn::PocoCassandraConnectorLoader"
+				library="BeeeOnServerCassandraConnector" />
+
+		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="localeManager" ref="localeManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlIdentityDao" class="BeeeOn::PocoSQLIdentityDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlVerifiedIdentityDao"
+				class="BeeeOn::PocoSQLVerifiedIdentityDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="localeManager" ref="localeManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlRoleInGatewayDao"
+				class="BeeeOn::PocoSQLRoleInGatewayDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+			<set name="timeZoneProvider" ref="timeZoneProvider" />
+		</instance>
+
+		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+			<set name="timeZoneProvider" ref="timeZoneProvider" />
+			<set name="communicator" ref="gatewayCommunicator" />
+		</instance>
+
+		<instance name="sqlGatewayMessageDao" class="BeeeOn::PocoSQLGatewayMessageDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlGatewayStatusDao" class="BeeeOn::PocoSQLGatewayStatusDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlLocationDao" class="BeeeOn::PocoSQLLocationDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlDeviceDao" class="BeeeOn::PocoSQLDeviceDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlDevicePropertyDao" class="BeeeOn::PocoSQLDevicePropertyDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlSensorHistoryDao" class="BeeeOn::PocoSQLSensorHistoryDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlControlDao" class="BeeeOn::PocoSQLControlDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlFcmTokenDao" class="BeeeOn::PocoSQLFCMTokenDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="sqlFcmRecipientsDao" class="BeeeOn::PocoSQLFCMRecipientsDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
+		</instance>
+
+		<instance name="iniSqlLoader" class="BeeeOn::IniFileQueryLoader">
+			<set name="database" text="beeeon" />
+			<set name="file" text="${database.queries.ini.file}" />
+		</instance>
+
+		<instance name="fsSqlLoader" class="BeeeOn::FilesystemQueryLoader">
+			<set name="rootPath" text="${database.queries.fs.rootDir}" />
+			<set name="extension" text="sql" />
+			<add name="preprocessors" ref="sqlQuerySimplifier" />
+		</instance>
+
+		<instance name="sqlQuerySimplifier" class="BeeeOn::SQLPreprocessor">
+			<add name="preserveUnneededLines" number="${database.queries.fs.preserveLines}" />
+		</instance>
+
+		<alias name="sqlLoader" ref="${database.queries.impl}SqlLoader" />
+	</factory>
+</system>

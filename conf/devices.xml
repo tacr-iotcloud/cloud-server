@@ -1,0 +1,828 @@
+<devices>
+	<device id="0">
+		<name>Pressure Sensor</name>
+		<vendor>BeeeOn</vendor>
+
+		<match>
+			<exact name="Air Pressure Sensor" vendor="BeeeOn" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="pressure">
+				<name>Pressure</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="1">
+		<name>Temperature and Humidity Sensor</name>
+		<vendor>Brno University of Technology</vendor>
+
+		<match>
+			<exact name="Temperature and humidity sensor" vendor="BeeeOn" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="1" type="temperature,inner">
+				<name>Room Temperature</name>
+			</sensor>
+			<sensor id="2" type="temperature,outer">
+				<name>Outside Temperature</name>
+			</sensor>
+			<sensor id="3" type="humidity,inner">
+				<name>Room Humidity</name>
+			</sensor>
+			<sensor id="4" type="rssi">
+				<name>Signal strength</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="2">
+		<name>Temperature Sensor</name>
+		<vendor>Brno University of Technology</vendor>
+
+		<match>
+			<exact name="Temperature sensor" vendor="BeeeOn" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="1" type="temperature,inner">
+				<name>Room Temperature</name>
+			</sensor>
+			<sensor id="2" type="rssi">
+				<name>Signal strength</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="10">
+		<name>Remote Switch</name>
+		<vendor>Belkin WeMo</vendor>
+
+		<match>
+			<exact name="Switch F7C027fr" vendor="Belkin WeMo" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="11">
+		<name>Bulb</name>
+		<vendor>Belkin WeMo</vendor>
+
+		<match>
+			<exact name="Led Light Bulb" vendor="Belkin WeMo" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="brightness,controllable">
+				<name>Brightness</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="12">
+		<name>Light Dimmer</name>
+		<vendor>Belkin WeMo</vendor>
+
+		<match>
+			<exact name="Dimmer" vendor="Belkin WeMo" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="brightness,controllable">
+				<name>Brightness</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="20">
+		<name>VPT Boiler Control</name>
+		<vendor>Thermona</vendor>
+
+		<match>
+			<exact name="Boiler" vendor="Thermona" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="enum:MOD_BOILER_STATUS">
+				<name>Status</name>
+			</sensor>
+			<sensor id="1" type="enum:MOD_BOILER_MODE">
+				<name>Mode</name>
+			</sensor>
+			<sensor id="2" type="temperature">
+				<name>Water Temperature</name>
+			</sensor>
+			<sensor id="3" type="temperature,outer">
+				<name>Outer Temperature</name>
+			</sensor>
+			<sensor id="4" type="temperature,outer">
+				<name>Avarage Outer Temperature</name>
+			</sensor>
+			<sensor id="5" type="performance">
+				<name>Boiler Performance</name>
+			</sensor>
+			<sensor id="6" type="pressure">
+				<name>Boiler Pressure</name>
+			</sensor>
+			<sensor id="7" type="bitmap:MOD_CURRENT_BOILER_OT_FAULT_FLAGS">
+				<name>OpenTherm Fault Flags</name>
+			</sensor>
+			<sensor id="8" type="bitmap:MOD_CURRENT_BOILER_OT_OEM_FAULTS">
+				<name>OpenTherm OEM Flags</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="21">
+		<name>VPT Zone Control</name>
+		<vendor>Thermona</vendor>
+
+		<match>
+			<pattern name="Zone ?" vendor="Thermona" />
+		</match>
+
+		<modules>
+			<control id="0" type="enum:MOD_BOILER_OPERATION_TYPE,controllable">
+				<name>Operation Type</name>
+			</control>
+			<control id="1" type="enum:MOD_BOILER_OPERATION_MODE,controllable">
+				<name>Operation Mode</name>
+			</control>
+			<sensor id="2" type="temperature,inner">
+				<name>Requested Room Temperature</name>
+			</sensor>
+			<sensor id="3" type="temperature,inner">
+				<name>Room Temperature</name>
+			</sensor>
+			<control id="4" type="temperature,controllable">
+				<name>Requested Water Temperature</name>
+			</control>
+			<sensor id="5" type="temperature">
+				<name>Water Temperature</name>
+			</sensor>
+			<control id="6" type="temperature,controllable">
+				<name>Manual Requested Room Temperature</name>
+			</control>
+			<control id="7" type="temperature,controllable">
+				<name>Manual Requested Water Temperature</name>
+			</control>
+			<control id="8" type="temperature,controllable">
+				<name>Manual Requested TUV Temperature</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="30">
+		<name>Bluetooth Device</name>
+		<vendor>Unknown</vendor>
+
+		<match>
+			<pattern name="*" vendor="Bluetooth Availability" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="availability">
+				<name>Available</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="40">
+		<name>AC-88 Wireless Mains Outlet</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="AC-88" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="41">
+		<name>JA-82SH Wireless Shake Sensor</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-82SH" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="shake">
+				<name>Shake</name>
+			</sensor>
+			<sensor id="1" type="security_alert">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="42">
+		<name>JA-85ST Wireless Fire Sensor</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-85ST" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="fire">
+				<name>Fire Sensor Alarm</name>
+			</sensor>
+			<sensor id="1" type="security_alert">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="43">
+		<name>JA-81M Wireless Magnetic Door Contact</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-81M" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="open_close">
+				<name>Open/Closed</name>
+			</sensor>
+			<sensor id="1" type="security_alert">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="44">
+		<name>JA-83M Wireless Magnetic Door Contact</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-83M" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="open_close">
+				<name>Open/Closed</name>
+			</sensor>
+			<sensor id="1" type="security_alert">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="45">
+		<name>RC-86K Wireless Remote Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="RC-86K" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="open_close">
+				<name>Open/Closed</name>
+			</sensor>
+			<sensor id="1" type="security_alert">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="46">
+		<name>TP-82N Wireless Thermostat</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="TP-82N" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<control id="0" type="temperature,inner,controllable,manual-only">
+				<name>Requested Temperature</name>
+			</control>
+			<sensor id="1" type="temperature,inner">
+				<name>Room Temperature</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="47">
+		<name>AC-88 Wireless Mains Outlet</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="AC-88 (sensor)" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="on_off" />
+		</modules>
+	</device>
+
+	<device id="48">
+		<name>RC-86K Wireless Remote Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="RC-86K (dual)" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="open_close">
+				<name>Left buttons</name>
+			</sensor>
+			<sensor id="1" type="open_close">
+				<name>Right buttons</name>
+			</sensor>
+			<sensor id="2" type="security_alert" />
+			<sensor id="3" type="battery" />
+		</modules>
+	</device>
+
+	<device id="49">
+		<name>JA-83P Wireless PIR Sensor</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-83P" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="motion" />
+			<sensor id="1" type="security_alert" />
+			<sensor id="2" type="battery" />
+		</modules>
+	</device>
+
+	<device id="10000">
+		<name>PG (X/Y) Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<pattern name="PG[XY]" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+		</modules>
+	</device>
+
+	<device id="10001">
+		<name>Siren Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="Siren" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off" />
+			<control id="1" type="enum:SIREN_BEEPING" />
+		</modules>
+	</device>
+
+	<device id="50">
+		<name>Dimmable Light</name>
+		<vendor>Philips Hue</vendor>
+
+		<match>
+			<exact name="Dimmable Light Bulb" vendor="Philips Hue" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="brightness,controllable">
+				<name>Brightness</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="60">
+		<name>Air quality sensor</name>
+		<vendor>Protronix</vendor>
+
+		<match>
+			<exact name="NLII-CO2+RH+T-IQRF" vendor="Protronix" />
+			<exact name="Protronix NLII-CO2+RH+T-IQRF+" vendor="Protronix s.r.o." />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature">
+				<name>Temperature</name>
+			</sensor>
+			<sensor id="1" type="humidity">
+				<name>Humidity</name>
+			</sensor>
+			<sensor id="2" type="co2">
+				<name>CO2</name>
+			</sensor>
+			<sensor id="3" type="battery">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="4" type="rssi">
+				<name>Signal strength</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="61">
+		<name>Air quality sensor</name>
+		<vendor>IQ Home</vendor>
+
+		<match>
+			<exact name="SN-THC-01" vendor="IQHome" />
+			<exact name="SN-THC-02" vendor="IQHome" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature">
+				<name>Temperature</name>
+			</sensor>
+			<sensor id="1" type="humidity">
+				<name>Humidity</name>
+			</sensor>
+			<sensor id="2" type="co2">
+				<name>CO2</name>
+			</sensor>
+			<sensor id="3" type="battery">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="4" type="rssi">
+				<name>Signal strength</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="62">
+		<name>Temperature and Humidity Sensor</name>
+		<vendor>IQ Home</vendor>
+
+		<match>
+			<exact name="SN-TH-01" vendor="IQHome" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature">
+				<name>Temperature</name>
+			</sensor>
+			<sensor id="1" type="humidity">
+				<name>Humidity</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="3" type="rssi">
+				<name>Signal strength</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="70">
+		<name>Smart Temperature and Humidity Sensor</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi SmartClim" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature">
+				<name>Room Temperature</name>
+			</sensor>
+			<sensor id="1" type="humidity">
+				<name>Room Humidity</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="71">
+		<name>Motion Sensor</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi Smart Motion" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="motion">
+				<name>Motion</name>
+			</sensor>
+			<sensor id="1" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="72">
+		<name>Magnetic Door Sensor</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi Smart Door" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="open_close">
+				<name>Open/Closed</name>
+			</sensor>
+			<sensor id="1" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="73">
+		<name>Remote Switch</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi Smart Watt" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>Plug On/Off</name>
+			</control>
+			<control id="1" type="on_off,controllable">
+				<name>Light On/Off</name>
+			</control>
+			<sensor id="2" type="power">
+				<name>Electric Power</name>
+			</sensor>
+			<sensor id="3" type="voltage">
+				<name>Voltage</name>
+			</sensor>
+			<sensor id="4" type="current">
+				<name>Electric Current</name>
+			</sensor>
+			<sensor id="5" type="frequency">
+				<name>Frequency</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="74">
+		<name>Color Light</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi SmartLite" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="brightness,controllable">
+				<name>Brightness</name>
+			</control>
+			<control id="2" type="color_temperature,controllable">
+				<name>Color Temperature</name>
+			</control>
+			<control id="3" type="color,controllable">
+				<name>Color</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="75">
+		<name>Color Light</name>
+		<vendor>Tabu Lumen</vendor>
+
+		<match>
+			<exact name="TL 100S Smart Light" vendor="Tabu Lumen" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="brightness,controllable">
+				<name>Brightness</name>
+			</control>
+			<control id="2" type="color,controllable">
+				<name>Color</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="76">
+		<name>Color Light</name>
+		<vendor>Revogi</vendor>
+
+		<match>
+			<exact name="Delite-1748" vendor="Revogi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+			<control id="1" type="brightness,controllable" />
+			<control id="2" type="color_temperature,controllable" />
+			<control id="3" type="color,controllable" />
+		</modules>
+	</device>
+
+	<device id="77">
+		<name>Smart Candle</name>
+		<vendor>Revogi</vendor>
+
+		<match>
+			<exact name="Delite-ED33 Smart Candle" vendor="Revogi" />
+			<exact name="Delite-ED33" vendor="Revogi" />
+			<exact name="Delite-0870" vendor="Revogi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+			<control id="1" type="brightness,controllable" />
+			<control id="2" type="color,controllable" />
+		</modules>
+	</device>
+
+	<device id="78">
+		<name>Remote Switch</name>
+		<vendor>Revogi</vendor>
+
+		<match>
+			<exact name="MeterPlug-F19F" vendor="Revogi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+			<sensor id="1" type="power" />
+			<sensor id="2" type="voltage" />
+			<sensor id="3" type="current" />
+			<sensor id="4" type="frequency" />
+		</modules>
+	</device>
+
+	<device id="80">
+		<name>ZW100 MultiSensor 6</name>
+		<vendor>Aeotec</vendor>
+
+		<match>
+			<exact name="ZW100 MultiSensor 6" vendor="Aeotec" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="temperature,inner" />
+			<sensor id="2" type="luminance,inner" />
+			<sensor id="3" type="humidity" />
+			<sensor id="4" type="ultraviolet" />
+			<sensor id="5" type="shake" />
+		</modules>
+	</device>
+
+	<device id="90">
+		<name>Door Sensor DC23-ZW</name>
+		<vendor>Climax</vendor>
+
+		<match>
+			<exact name="Unknown: type=0001, id=0001" vendor="Unknown: id=018e" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="security_alert" />
+			<sensor id="2" type="open_close" />
+		</modules>
+	</device>
+
+	<device id="100">
+		<name>Door Sensor FGK-101</name>
+		<vendor>Fibaro</vendor>
+
+		<match>
+			<exact name="FGK101 Door Opening Sensor" vendor="FIBARO System" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="open_close" />
+		</modules>
+	</device>
+
+	<device id="101">
+		<name>Smoke Sensor FGSD-002</name>
+		<vendor>Fibaro</vendor>
+
+		<match>
+			<exact name="FGSD002 Smoke Sensor" vendor="FIBARO System" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="temperature" />
+			<sensor id="2" type="security_alert" />
+			<sensor id="3" type="smoke" />
+			<sensor id="4" type="heat" />
+		</modules>
+	</device>
+
+	<device id="102">
+		<name>Wall Plug FGWPE/F</name>
+		<vendor>Fibaro</vendor>
+
+		<match>
+			<exact name="FGWPE/F Wall Plug Gen5" vendor="FIBARO System" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="on_off,controllable" />
+			<sensor id="1" type="on_off" />
+			<sensor id="2" type="power" />
+		</modules>
+	</device>
+
+	<device id="110">
+		<name>Door/Window 3-in-1 Sensor</name>
+		<vendor>Philio Technology Corporation</vendor>
+
+		<match>
+			<exact name="PST02-C Door/Window 3 in 1 sensor" vendor="Philio Technology Corporation" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="temperature" />
+			<sensor id="2" type="luminance" />
+			<sensor id="3" type="open_close" />
+		</modules>
+	</device>
+
+	<device id="111">
+		<name>Door/Window 3-in-1 Sensor</name>
+		<vendor>D-Link Technology</vendor>
+		<match>
+			<exact name="Unknown: type=0002, id=000d" vendor="D-Link Corporation" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="temperature" />
+			<sensor id="2" type="luminance" />
+			<sensor id="3" type="open_close" />
+		</modules>
+	</device>
+
+	<device id="120">
+		<name>PM 2.5 Monitor</name>
+		<vendor>MCO Home</vendor>
+		<match>
+			<exact name="Unknown: type=0a05, id=0201 (generic)" vendor="Mcohome" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature" />
+			<sensor id="1" type="humidity" />
+			<sensor id="2" type="pm25" />
+		</modules>
+	</device>
+</devices>

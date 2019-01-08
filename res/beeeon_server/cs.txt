@@ -1,0 +1,332 @@
+cs {
+	hello { "Překlad funguje" }
+
+	not_authenticated { "uživatel nepřihlášen" }
+	requested_resource_missing { "požadovaný zdroj zřejmě neexistuje" }
+	not_enough_permission { "příliš nízká oprávnění pro přístup ke zdroji" }
+	malformed_input_data { "vstupní data jsou neplatná" }
+	invalid_input_data { "chybně zadané údaje" }
+	internal_error { "interní chyba serveru" }
+	in_progress { "operace už běží" }
+	already_exists { "položka již existuje" }
+	entity_not_writable { "položku nelze vytvářet ani měnit" }
+
+	types {
+		availability {
+			label { "přítomnost" }
+			values {
+				unavailable { "nepřítomen" }
+				available  { "přítomen" }
+			}
+		}
+		battery {
+			label { "baterie" }
+			levels {
+				critical { "kritická" }
+				low    { "nízká" }
+				medium { "střední" }
+				high   { "vysoká" }
+			}
+		}
+		bitmap {
+			label { "příznaky" }
+		}
+		brightness {
+			label { "jas" }
+		}
+		co2 {
+			label { "CO2"}
+			levels {
+				outdoor      { "normální veknovní koncentrace" }
+				indoor       { "normální pokojová koncentrace" }
+				poor_air     { "vydýchaný vzduch" }
+				unhealthy    { "hrozí zdravotní problémy" }
+				stay_hours   { "nebezpečné po několika hodinách" }
+				stay_minutes { "nebezpečné po několika minutách" }
+				dangerous    { "extrémní nebezpečný stav" }
+			}
+		}
+		enum {
+			label { "výčet" }
+		}
+		fire {
+			label { "oheň" }
+			values {
+				no_fire { "nehoří" }
+				fire    { "hoří" }
+			}
+		}
+		humidity {
+			label { "vlhkost" }
+		}
+		luminance {
+			label { "osvětlení" }
+		}
+		motion {
+			label { "pohyb" }
+			values {
+				no_motion { "bez pohybu" }
+				motion    { "pohyb" }
+			}
+		}
+		noise {
+			label { "hluk" }
+			levels {
+				normal         { "normální" }
+				acceptable     { "přípustný" }
+				laud           { "hlasitý" }
+				dangerous      { "nebezpečné pro delší setrvání" }
+				very_dangerous { "nebezpečné pro krátké setrvání" }
+				damaging       { "hrozí okamžité poškození sluchu" }
+			}
+		}
+		open_close {
+			label { "otevřeno/zavřeno" }
+			values {
+				closed { "zavřeno" }
+				open   { "otevřeno" }
+			}
+		}
+		on_off {
+			label { "zapnuto/vypnuto" }
+			values {
+				off { "vypnuto" }
+				on  { "zapnuto" }
+			}
+		}
+		performance {
+			label { "výkon" }
+			levels {
+				idle      { "nečinný" }
+				high_load { "velmi vytížený" }
+			}
+		}
+		pressure {
+			label { "tlak" }
+		}
+		rssi {
+			label { "signál" }
+			levels {
+				poor { "slabý" }
+				good { "dobrý" }
+				high { "silný" }
+			}
+		}
+		security_alert {
+			label { "výstraha" }
+			values {
+				ease  { "klid" }
+				alert { "výstraha" }
+			}
+		}
+		shake {
+			label { "otřesy" }
+			values {
+				ease  { "klid" }
+				shake { "otřes" }
+			}
+		}
+		temperature {
+			label { "teplota" }
+		}
+		ultraviolet {
+			label { "UV" }
+			levels {
+				low       { "nízký" }
+				moderate  { "střední" }
+				high      { "vysoký" }
+				very_high { "velmi vysoký" }
+				extreme   { "extrémní" }
+			}
+		}
+		power {
+			label { "výkon" }
+		}
+		voltage {
+			label { "elektrické napětí" }
+		}
+		current {
+			label { "elektrický proud" }
+		}
+		frequency {
+			label { "frekvence" }
+		}
+		color_temperature {
+			label { "teplota barvy" }
+		}
+		color {
+			label { "barva" }
+		}
+		smoke {
+			label { "kouř" }
+			values {
+				clear { "čisto" }
+				smoke { "kouř" }
+			}
+		}
+		heat {
+			label { "heat" }
+			values {
+				normal { "normální" }
+				overheat { "přehřátí" }
+			}
+		}
+		pm25 {
+			label { "pevné částice <2.5 um" }
+			values {
+				very_low  { "velmi nízká" }
+				low       { "nízká" }
+				medium    { "střední" }
+				high      { "vysoká" }
+				very_high { "velmi vysoká" }
+			}
+		}
+	}
+
+	enums {
+		MOD_BOILER_OPERATION_TYPE {
+			label { "režim vytápění" }
+			values {
+				off { "vypnuto" }
+				room_regulator { "pokojový termostat" }
+				equiterm_regulator { "ekvitermní regulátor" }
+				constant_water { "konstantní teplota vody" }
+				hot_water { "ohřev TUV" }
+			}
+		}
+
+		MOD_BOILER_OPERATION_MODE {
+			label { "režim provozu" }
+			values {
+				automatic { "automatický" }
+				manual { "ruční" }
+				vacation { "dovolená" }
+			}
+		}
+
+		MOD_BOILER_STATUS {
+			label { "stav kotle" }
+			values {
+				undefined { "nedefinovaný" }
+				heating { "ohřev" }
+				hot_water { "ohřev TUV" }
+				failure { "selhání" }
+				shutdown { "vypnuto" }
+			}
+		}
+
+		MOD_BOILER_MODE {
+			label { "režim kotle" }
+			values {
+				undefined { "nedefinovaný" }
+				on { "zapnuto" }
+				off { "vypnuto" }
+			}
+		}
+
+		SIREN_BEEPING {
+			label { "pípání sirény" }
+			values {
+				none { "žádné" }
+				slow { "pomalé" }
+				fast { "rychlé" }
+			}
+		}
+	}
+
+	bitmaps {
+		MOD_CURRENT_BOILER_OT_FAULT_FLAGS {
+			label { "OT příznaky selhání" }
+			flags {
+				service_request { "nezbytný servisní zásah" }
+				lockout_reset { "lockout reset povolen" }
+				low_water_press { "nízký tlak vody" }
+				gas_flame_fault { "plyn/plamen" }
+				air_press_fault { "tlak vzduchu" }
+				water_overtemp { "přehřátí vody" }
+			}
+		}
+
+		MOD_CURRENT_BOILER_OT_OEM_FAULTS {
+			label { "OT OEM Faults" }
+			groups {
+				oem_specific { "OEM specific" }
+			}
+		}
+	}
+
+	modules {
+		room_temperature {
+			label { "pokojová teplota" }
+		}
+		outside_temperature {
+			label { "venkovní teplota" }
+		}
+		room_humidity {
+			label { "pokojová vlhkost" }
+		}
+
+		groups {
+			zone_1 {
+				label { "zóna 1" }
+			}
+			zone_2 {
+				label { "zóna 2" }
+			}
+			zone_3 {
+				label { "zóna 3" }
+			}
+			zone_4 {
+				label { "zóna 4" }
+			}
+		}
+	}
+
+	gateway {
+		scan {
+			state {
+				idle { "Hledání zařízení neprobíhá" }
+				waiting { "Spouští se hledání zařízení" }
+				processing { "Probíhá hledání zařízení" }
+				finished { "Hledání zařízení bylo úspěšně dokončeno" }
+				failed { "Při hledání zařízení došlo k chybě" }
+			}
+		}
+	}
+
+	baf {
+		gateway_watcher {
+			connected {
+				title { "Brána {0} se připojila" }
+				body { "Brána {0} se připojila {1}." }
+			}
+
+			reconnected {
+				title { "Brána {0} se znovu připojila" }
+				body {
+					"Brána {0} se znovu připojila {1}. Pokud se tato událost opakuje často,"
+					" prosím, zkontrolujte Internetové připojení vaší brány, je pravděpodobně"
+					" nestabilní."
+				}
+			}
+
+			disconnected {
+				title { "Brána {0} se odpojila" }
+				body {
+					"Brána {0} se odpojila {1} a nekomunikuje. Pokud se jedná o neočekávanou událost,"
+					" prosím, zkontrolujte Internetové připojení vaší brány, je pravděpodobně nestabilní."
+				}
+			}
+		}
+	}
+
+	device {
+		property {
+			ip-address { "IP adresa" }
+			password { "Heslo" }
+			firmware { "Firmware" }
+			mac-address { "MAC adresa" }
+			serial { "Seriové číslo" }
+		}
+	}
+}

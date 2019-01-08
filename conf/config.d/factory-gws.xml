@@ -1,0 +1,87 @@
+<system>
+	<factory>
+		<instance name="webSocketServer" class="BeeeOn::WebSocketServer">
+			<set name="sslConfig" ref="gwsSSLServer" if-yes="${gws.ws.ssl.enable}" />
+			<set name="requestHandlerFactory" ref="gwsRequestHandlerFactory" />
+			<set name="name" text="gws" />
+			<set name="host" text="${gws.ws.host}" />
+			<set name="port" number="${gws.ws.port}" />
+			<set name="backlog" number="${gws.ws.backlog}" />
+			<set name="minThreads" number="${gws.ws.minThreads}" />
+			<set name="maxThreads" number="${gws.ws.maxThreads}" />
+			<set name="threadIdleTime" time="${gws.ws.threadIdleTime}" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
+			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />
+		</instance>
+
+		<instance name="gwsRequestHandlerFactory" class="BeeeOn::GWRequestHandlerFactory">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
+			<set name="gatewayService" ref="gatewayService" />
+			<set name="verifierFactory" ref="gatewayPeerVerifierFactory" />
+			<set name="maxMessageSize" number="${gws.ws.maxMessageSize}" />
+		</instance>
+
+		<instance name="gatewayCommunicator" class="BeeeOn::GatewayCommunicator">
+			<set name="messageHandler" ref="messageHandler" />
+			<set name="rateLimiterFactory" ref="gatewayLimiterFactory" />
+			<set name="maxMessageSize" number="${gws.comm.maxMessageSize}" />
+			<set name="receiveTimeout" time="${gws.comm.receiveTimeout}" />
+			<set name="sendTimeout" time="${gws.comm.sendTimeout}" />
+			<set name="maxBulkDuration" time="${gws.comm.maxBulkDuration}" />
+			<set name="maxBulkSize" number="${gws.comm.maxBulkSize}" />
+			<set name="minThreads" number="${gws.comm.minThreads}" />
+			<set name="maxThreads" number="${gws.comm.maxThreads}" />
+			<set name="threadIdleTime" time="${gws.comm.threadIdleTime}" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
+			<add name="listeners" ref="bafGatewayWatcher" />
+			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.gateways.enable}" />
+		</instance>
+
+		<instance name="responseExpectedQueue" class="BeeeOn::GWResponseExpectedQueue">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
+			<set name="rpcForwarder" ref="asyncGatewayRPC" />
+			<set name="responseTimeout" time="${gws.queue.responseTimeout}" />
+		</instance>
+
+		<instance name="messageHandler" class="BeeeOn::GWMessageHandlerImpl">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
+			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
+			<set name="rpcForwarder" ref="asyncGatewayRPC" />
+			<set name="deviceService" ref="deviceService" />
+			<set name="gatewayService" ref="gatewayService" />
+			<set name="sensorHistoryService" ref="sensorHistoryService" />
+			<add name="cryptoConfig" ref="devicePropertiesCryptoConfig" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
+			<add name="dataListeners" ref="publishingWatcher" if-yes="${baf.publish.data.enable}" />
+			<add name="deviceListeners" ref="publishingWatcher" if-yes="${baf.publish.device.enable}" />
+			<add name="deviceListeners" ref="gatewayMessageService" />
+		</instance>
+
+		<instance name="gatewayScanController" class="BeeeOn::GatewayScanController">
+			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="defaultDuration" time="2 m" />
+			<set name="cleanupInterval" time="15 m" />
+			<set name="cleanupOlderThan" time="30 m" />
+		</instance>
+
+		<alias name="gatewayPeerVerifierFactory" ref="${gws.peer.verifier}GatewayPeerVerifierFactory" />
+
+		<instance name="strictGatewayPeerVerifierFactory"
+			class="BeeeOn::X509GatewayPeerVerifierFactory" />
+
+		<instance name="relaxedGatewayPeerVerifierFactory"
+				class="BeeeOn::RelaxedGatewayPeerVerifierFactory">
+			<set name="verifierFactory" ref="strictGatewayPeerVerifierFactory" />
+		</instance>
+
+		<instance name="noGatewayLimiterFactory" class="BeeeOn::NoGatewayRateLimiterFactory">
+		</instance>
+
+		<instance name="slidingWindowGatewayLimiterFactory" class="BeeeOn::SlidingWindowRateLimiterFactory">
+			<set name="maxRatePerMinute" number="${gws.rate.perMinute}" />
+			<set name="maxRatePerHour" number="${gws.rate.perHour}" />
+		</instance>
+
+		<alias name="gatewayLimiterFactory" ref="${gws.rate.impl}GatewayLimiterFactory" />
+	</factory>
+</system>

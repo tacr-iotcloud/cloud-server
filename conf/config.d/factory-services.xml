@@ -1,0 +1,142 @@
+<system>
+	<factory>
+		<!-- Bussiness layer -->
+
+		<instance name="userService" class="BeeeOn::UserServiceImpl">
+			<set name="userDao" ref="userDao" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="authService" class="BeeeOn::AuthServiceImpl">
+			<set name="userDao" ref="userDao" />
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="sessionManager" ref="sessionManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="localeManager" ref="localeManager" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
+			<add name="providers" ref="googlePermitAuthProvider" if-yes="${testing.enable}" />
+			<add name="providers" ref="apiKeyAuth" if-yes="${apikeys.enable}" />
+			<add name="providers" ref="googleWebAuth" if-yes="${web-app.google.enable}" />
+			<add name="providers" ref="facebookWebAuth" if-yes="${web-app.facebook.enable}" />
+			<add name="providers" ref="googleTesterAuth" if-yes="${tester.google.enable}" />
+			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.identity.enable}" />
+		</instance>
+
+		<instance name="deviceService" class="BeeeOn::DeviceServiceImpl">
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
+			<set name="devicePropertyDao" ref="devicePropertyDao" />
+			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
+			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
+			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.device.enable}" />
+		</instance>
+
+		<instance name="gatewayService" class="BeeeOn::GatewayServiceImpl">
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="gatewayStatusDao" ref="gatewayStatusDao" />
+			<set name="gatewayMessageDao" ref="gatewayMessageDao" />
+			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="scanController" ref="gatewayScanController" />
+			<set name="gatewayMessagesLimit" number="${gws.messages.limit}" />
+		</instance>
+
+		<instance name="gatewayMessageService" class="BeeeOn::GatewayMessageServiceImpl">
+			<set name="gatewayMessageDao" ref="gatewayMessageDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="gatewayMessagesLimit" number="${gws.messages.limit}" />
+		</instance>
+
+		<instance name="locationService"
+				class="BeeeOn::LocationServiceImpl">
+			<set name="locationDao" ref="locationDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="identityService" class="BeeeOn::IdentityServiceImpl">
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="roleService" class="BeeeOn::RoleServiceImpl">
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
+			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.identity.enable}" />
+		</instance>
+
+		<instance name="sensorService" class="BeeeOn::SensorServiceImpl">
+			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="accessPolicy" ref="accessPolicy" />
+		</instance>
+
+		<instance name="controlService" class="BeeeOn::ControlServiceImpl">
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="controlDao" ref="controlDao" />
+			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="accessPolicy" ref="accessPolicy" />
+		</instance>
+
+		<instance name="sensorHistoryService" class="BeeeOn::SensorHistoryServiceImpl">
+			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="accessPolicy" ref="ruledSensorHistoryPolicy" />
+		</instance>
+
+		<instance name="fcmTokenService" class="BeeeOn::FCMTokenServiceImpl">
+			<set name="fcmTokenDao" ref="fcmTokenDao" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="accessPolicy" ref="accessPolicy" />
+		</instance>
+
+		<!-- Access policy -->
+
+		<instance name="defaultSensorHistoryRules" class="BeeeOn::SensorHistoryRules">
+			<set name="acceptZeroInterval" number="1" />
+			<set name="rules">
+				<pair key="0..1 s"  text="max" />
+				<pair key="1 s..1 h+"  text="0..30 m+" />
+				<pair key="1 h+..25 h+"  text="0..5 h+" />
+				<pair key="25 h+..8 d+"  text="5 m..1 d+" />
+				<pair key="8 d+..32 d+" text="1 h..7 d+" />
+				<pair key="*"          text="1 d" />
+			</set>
+		</instance>
+
+		<instance name="ruledSensorHistoryPolicy" class="BeeeOn::RuledSensorHistoryAccessPolicy">
+			<set name="innerPolicy" ref="accessPolicy" />
+			<set name="rules" ref="defaultSensorHistoryRules" />
+		</instance>
+
+		<instance name="accessPolicy"
+				class="BeeeOn::DefaultAccessPolicy">
+			<set name="userDao" ref="userDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="locationDao" ref="locationDao" />
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
+			<set name="fcmTokenDao" ref="fcmTokenDao" />
+		</instance>
+
+	</factory>
+</system>

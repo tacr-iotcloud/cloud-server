@@ -1,0 +1,130 @@
+<?warn This file is intended for testing only?>
+
+<devices>
+	<device id="0">
+		<name>T:DEV_TEMPERATURE_HUMIDITY</name>
+		<vendor>T:MANUFACTURER_BUT</vendor>
+		<match>
+			<exact name="Temperature Humidity v1.0" vendor="BeeeOn" />
+		</match>
+		<modules>
+			<sensor id="0" type="temperature">
+				<name>room_temperature</name>
+			</sensor>
+			<sensor id="1" type="temperature">
+				<name>outside_temperature</name>
+			</sensor>
+			<sensor id="2" type="humidity">
+				<name>room_humidity</name>
+			</sensor>
+			<battery id="3" type="battery" />
+			<rssi id="4" type="rssi" />
+		</modules>
+	</device>
+
+	<device id="2">
+		<name>T:DEV_INTERNAL_PRESSURE</name>
+		<vendor>T:MANUFACTURER_BUT</vendor>
+		<match>
+			<exact name="Internal Pressure v1.0" vendor="BeeeOn" />
+		</match>
+		<modules>
+			<sensor id="0" type="pressure" />
+		</modules>
+	</device>
+
+	<device id="3">
+		<name>T:DEV_VIRTUAL_THN</name>
+		<vendor>T:MANUFACTURER_VIRTUAL</vendor>
+		<match>
+			<exact name="THN v1.0" vendor="Virtual" />
+		</match>
+		<modules>
+			<sensor id="0" type="temperature" />
+			<sensor id="1" type="humidity" />
+			<sensor id="2" type="noise" />
+		</modules>
+	</device>
+
+	<device id="4">
+		<name>T:DEV_VIRTUAL_THN_X3</name>
+		<vendor>T:MANUFACTURER_VIRTUAL</vendor>
+		<match>
+			<exact name="THNx3 v1.0" vendor="Virtual" />
+		</match>
+		<modules>
+			<sensor id="0" type="temperature">
+				<group>zone_1</group>
+			</sensor>
+			<sensor id="1" type="humidity">
+				<group>zone_1</group>
+			</sensor>
+			<sensor id="2" type="noise">
+				<group>zone_1</group>
+			</sensor>
+
+			<sensor id="3" type="temperature">
+				<group>zone_2</group>
+			</sensor>
+			<sensor id="4" type="humidity">
+				<group>zone_2</group>
+			</sensor>
+			<sensor id="5" type="noise">
+				<group>zone_2</group>
+			</sensor>
+
+			<sensor id="6" type="temperature">
+				<group>zone_3</group>
+			</sensor>
+			<sensor id="7" type="humidity">
+				<group>zone_3</group>
+			</sensor>
+			<sensor id="8" type="noise">
+				<group>zone_3</group>
+			</sensor>
+
+			<control id="9" type="brightness" />
+		</modules>
+	</device>
+
+	<device id="5">
+		<name>Presence dongle</name>
+		<vendor>Presentator Company</vendor>
+		<match>
+			<exact name="Presence DXGL" vendor="Presentator Company" />
+		</match>
+		<modules>
+			<sensor id="0" type="availability">
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="6">
+		<name>Unknown device</name>
+		<vendor>Some Company</vendor>
+		<match>
+			<pattern name="*" vendor="Availability" />
+		</match>
+		<modules>
+			<sensor id="0" type="availability">
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="7">
+		<name>Device with unknown sensors</name>
+		<vendor>Unknown sensors producer</vendor>
+		<match>
+			<exact name="Device with unknown sensors"
+				vendor="Unknown sensors producer" />
+		</match>
+		<modules>
+			<sensor id="0" type="temperature,inner">
+				<unknown from="${raw} * 4 / 3.0" />
+			</sensor>
+			<control id="1" type="temperature">
+				<unknown from="${raw} * 4 / 3.0" to="${value} * 3.0 / 4" />
+			</control>
+		</modules>
+	</device>
+</devices>

@@ -1,0 +1,371 @@
+<%@ impl include="model/OpMode.h" %>
+
+<script>
+function devices_uri(gwid, devid)
+{
+	if (!devid)
+		return "/gateways/" + gwid + "/devices";
+	else
+		return "/gateways/" + gwid + "/devices/" + devid;
+}
+
+function devices_clear() {
+	$("#devices-list .panel").empty();
+}
+
+function devices_check_discovery_progress(uri, status, refresh) {
+	tester.get(uri, "#devices", function (data) {
+		status.text(data["state"]["display_name"]);
+	});
+}
+
+function devices_append(gwid, device) {
+	var dev = $("<div class='device'></div>");
+	dev.append("<span class='id'></span>");
+	dev.append(", ");
+	dev.append("<span class='name'></span>");
+	dev.append(", ");
+	dev.append("<span class='type'></span>");
+
+	dev.find(".id").text(device["id"]);
+	dev.find(".name").text(device["name"]);
+
+	if (device["type"]["display_name"])
+		dev.find(".type").text(device["type"]["display_name"]);
+	else
+		dev.find(".type").text("unsupported");
+
+	if (device["state"] == "inactive") {
+		var activate = $("<button>Activate</button>");
+		activate.click(function () {
+			tester.put(devices_uri(gwid, device["id"]),
+				"#devices", {}, function (data) {
+					console.log(data);
+				});
+		});
+		dev.append(activate);
+	}
+	else {
+		var detail = $("<button>Detail</button>");
+		detail.click(function () {
+			tester.get(devices_uri(gwid, device["id"]),
+				"#devices", function (data) {
+					var panel = $("#devices-detail .panel");
+					panel.find(".id span")
+						.text(data["id"]);
+					panel.find(".name span")
+						.text(data["name"]);
+
+					if (data["type"]["display_name"]) {
+						panel.find(".type span")
+							.text(data["type"]["display_name"]);
+					}
+					else {
+						panel.find(".type span").text("unsupported");
+					}
+
+					panel.find(".first-seen span")
+						.text(new Date(data["first_seen"] * 1000));
+					panel.find(".last-seen span")
+						.text(new Date(data["last_seen"] * 1000));
+					panel.find(".active-since span")
+						.text(new Date(data["active_since"] * 1000));
+					panel.find(".available span")
+						.text(data["available"]);
+				});
+		});
+		dev.append(detail);
+
+		var unpair = $("<button>Unpair</button>");
+
+		unpair.click(function () {
+			var device_id = device["id"];
+
+			tester.delete(devices_uri(gwid, device_id), "#devices", function (data) {
+				console.log(data);
+			});
+		});
+		dev.append(unpair);
+	}
+
+	$("#devices-list .panel").append(dev);
+	return dev;
+}
+
+function devices_module_append(type, data)
+{
+	var module = $("<p class='module " + type + "'></p>");
+	module.text(data["display_name"]);
+
+	var popup = "id: " + data["id"] + ", type: " + data["type_id"];
+	module.attr("title", popup);
+	module.attr("alt", popup);
+	$("#devices-" + type + "s").append(module);
+
+	return module;
+}
+
+function devices_sensor_current(gwid, devid, modid, element) {
+	tester.get(devices_uri(gwid, devid) + "/sensors/" + modid + "/current",
+			"#devices", function (data) {
+		if (!data) {
+			console.log("no data for sensor " + devid + "/" + modid);
+			element.append(" <span>(no data)</span>");
+			return;
+		}
+
+		var value = $("<span class='sensor-current'></span>");
+		value.text(data["value"]);
+		value.attr("alt", new Date(data["at"] * 1000).toString());
+		value.attr("title", new Date(data["at"] * 1000).toString());
+
+		element.append(" ");
+		element.append(value);
+	});
+}
+
+function devices_control_state(state, data) {
+	if (!data || !data["state"])
+		return;
+
+	var finished_at = data["state"]["finished_at"];
+	var accepted_at = data["state"]["accepted_at"];
+	var requested_at = data["state"]["requested_at"];
+	var result = data["state"]["result"];
+
+	if (finished_at) {
+		state.text(result + " at " + new Date(finished_at * 1000));
+	}
+	else if (accepted_at) {
+		state.text("accepted at " + new Date(accepted_at * 1000));
+	}
+	else if (requested_at) {
+		state.text("requested at " + new Date(requested_at * 1000));
+	}
+	else {
+		state.text("");
+	}
+}
+
+function devices_control_current(gwid, devid, modid, element) {
+	tester.get(devices_uri(gwid, devid) + "/controls/" + modid + "/current",
+			"#devices", function (data) {
+		if (!data || !data["current"]) {
+			console.log("no data for control " + devid + "/" + modid);
+			element.append(" <span>(no data)</span>");
+		}
+		else {
+			var value = $("<span class='control-current'></span>");
+			value.text(data["current"]["value"]);
+			value.attr("alt", new Date(data["at"] * 1000).toString());
+			value.attr("title", new Date(data["at"] * 1000).toString());
+
+			element.append(" ");
+			element.append(value);
+		}
+
+		var input = $("<input type='number' />");
+		var request = $("<button>Change</button>");
+		var force = $("<input type='checkbox' name='force' title='Force' />");
+		var state = $("<span></span>");
+		var timeout = $("<input type='number' value='5' />");
+
+		devices_control_state(state, data);
+
+		var block = $("<span class='module-change-request'></span>");
+		block.append(input);
+		block.append(request);
+		block.append(force);
+		block.append(state);
+		block.append("<br /><span>Timeout: </span>");
+		block.append(timeout);
+		block.append("<br /><span>Mode: </span>");
+
+		var modes = [];
+		<% for (const auto &m : OpMode::all()) {%>
+			modes.push("<%= m.toString() %>");
+		<%} %>
+
+		var modeSelector = $("<select id='module-change-mode'></select>");
+		for (i in modes) {
+			var opt = $("<option></option>");
+			opt.value = modes[i];
+			opt.append(modes[i]);
+			modeSelector.append(opt);
+		}
+
+		block.append(modeSelector);
+
+		request.click(function () {
+			var stateLabel = state;
+			var forceBox = force;
+			var mode = modeSelector;
+
+			var uri = devices_uri(gwid, devid) + "/controls/" + modid + "/current";
+			if (forceBox[0].checked)
+				uri += "?force";
+
+			tester.post(uri, "#devices", {
+				value: input.val(),
+				timeout: timeout.val(),
+				mode: mode.val()
+			}, function (data) {
+				devices_control_state(state, data);
+			});
+		});
+
+		element.append(block);
+	});
+}
+
+tester.modules["devices"] = function () {
+	$("#devices-discover-button").click(function () {
+		var gwid = $("#devices-gateway-input").val();
+
+		if (gwid == "") {
+			alert("please, specify gateway to run discover on");
+			return;
+		}
+
+		$("#devices-discover-progress-refresh").remove();
+
+		var duration = $("#devices-discover-duration").val();
+
+		tester.post("/gateways/" + gwid + "/discovery", "#devices", {
+			time_limit: duration
+		}, function (data) {
+			var location = "/gateways/" + gwid + "/discovery";
+
+			var refresh = $("<button id='devices-discover-progress-refresh'></button>");
+			refresh.text("Refresh");
+			$("#devices-discover-progress .status").text("unknown");
+			$("#devices-discover-progress").append(refresh);
+
+			devices_check_discovery_progress(
+				location,
+				$("#devices-discover-progress .status"),
+				refresh);
+
+			refresh.click(function () {
+				devices_check_discovery_progress(
+					location,
+					$("#devices-discover-progress .status"),
+					refresh)
+			});
+		});
+	});
+	$("#devices-list-all-button").click(function () {
+		var gwid = $("#devices-gateway-input").val();
+
+		tester.get(devices_uri(gwid), "#devices", function (data) {
+			devices_clear();
+
+			for (i in data)
+				devices_append(gwid, data[i])
+		});
+	});
+	$("#devices-list-active-button").click(function () {
+		var gwid = $("#devices-gateway-input").val();
+
+		tester.get(devices_uri(gwid) + "?filter=active", "#devices", function (data) {
+			devices_clear();
+
+			for (i in data)
+				devices_append(gwid, data[i])
+		});
+	});
+	$("#devices-list-inactive-button").click(function () {
+		var gwid = $("#devices-gateway-input").val();
+
+		tester.get(devices_uri(gwid) + "?filter=inactive", "#devices", function (data) {
+			devices_clear();
+
+			for (i in data)
+				devices_append(gwid, data[i])
+		});
+	});
+	$("#devices-sensors-button").click(function () {
+		var gwid = $("#devices-gateway-input").val();
+		var devid = $("#devices-detail .panel .id span").text();
+
+		tester.get(devices_uri(gwid, devid) + "/sensors",
+			"#devices", function (data) {
+				$("#devices-sensors").empty();
+				for (i in data) {
+					var sensor = devices_module_append("sensor", data[i]);
+					devices_sensor_current(gwid, devid, data[i]["id"], sensor);
+				}
+			});
+	});
+	$("#devices-controls-button").click(function () {
+		var gwid = $("#devices-gateway-input").val();
+		var devid = $("#devices-detail .panel .id span").text();
+
+		tester.get(devices_uri(gwid, devid) + "/controls",
+			"#devices", function (data) {
+				$("#devices-controls").empty();
+				for (i in data) {
+					var control = devices_module_append("control", data[i]);
+					devices_control_current(gwid, devid, data[i]["id"], control);
+				}
+			});
+	});
+};
+</script>
+<div id="devices" class="module">
+	<h2>Devices Module</h2>
+
+	<div class="custom">
+		<label for="devices-gateway-input">Gateway</label>
+		<input id="devices-gateway-input" type="text" />
+		<br />
+		<button id="devices-discover-button">Discover New Devices</button>
+		<select id="devices-discover-duration">
+			<option value="10">10 s</option>
+			<option value="20">20 s</option>
+			<option value="30">30 s</option>
+			<option value="45">45 s</option>
+			<option value="60">1 min</option>
+			<option value="80">1 min 20 s</option>
+			<option value="90">1 min 30 s</option>
+			<option value="105">1 min 45 s</option>
+			<option value="120" selected="selected">2 min</option>
+			<option value="180">3 min</option>
+			<option value="240">4 min</option>
+			<option value="300">5 min</option>
+		</select>
+		<span id="devices-discover-progress"><span class="status"></span></span>
+		<br />
+		<button id="devices-list-active-button">List Active Devices</button>
+		<button id="devices-list-inactive-button">List Inactive Devices</button>
+		<button id="devices-list-all-button">List All Devices</button>
+
+		<div id="devices-list">
+			<h3>Devices</h3>
+
+			<div class="panel"></div>
+		</div>
+
+		<div id="devices-detail">
+			<h3>Device Detail</h3>
+
+			<div class="panel">
+				<p class="id">ID: <span></span></p>
+				<p class="name">Name: <span></span></p>
+				<p class="type">Type: <span></span></p>
+				<p class="first-seen">First seen: <span></span></p>
+				<p class="last-seen">Last seen: <span></span></p>
+				<p class="active-since">Active since: <span></span></p>
+				<p class="available">Available: <span></span></p>
+
+				<h4>Modules</h4>
+				<button id="devices-sensors-button">List Sensors</button>
+				<div id="devices-sensors"></div>
+				<button id="devices-controls-button">List Controls</button>
+				<div id="devices-controls"></div>
+			</div>
+		</div>
+	</div>
+	<div class="request"></div>
+	<div class="response"></div>
+</div>

@@ -1,0 +1,3 @@
+#pragma once
+
+#define RECOMMENDED_POCO_VERSION 0x01070000
