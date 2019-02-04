@@ -63,7 +63,7 @@ include(ManSupport)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "2018")
 set(CPACK_PACKAGE_VERSION_MINOR "12")
-set(CPACK_PACKAGE_VERSION_PATCH "1")
+set(CPACK_PACKAGE_VERSION_PATCH "2")
 set(CPACK_PACKAGE_NAME "iotcloud-server")
 set(CPACK_PACKAGE_VENDOR "Brno University of Technology")
 set(CPACK_PACKAGE_CONTACT "Jan Viktorin <iviktorin@fit.vutbr.cz>")
